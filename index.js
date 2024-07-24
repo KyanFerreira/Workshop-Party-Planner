@@ -17,7 +17,7 @@ async function render() {
 
 render();
 
-async function getEvents() {
+async function getEvents() { //[THE GET IS BEING HANDLED HERE]
   // TODO
   try {
     const response = await fetch(API_URL);
@@ -35,28 +35,25 @@ function renderEvents() {
   }
 
   const eventsCards = state.events.map((event) => {
-    //const button = document.createElement("button");
-    //button.innerText = "Delete Me"
-    //button.id = event.id;
+ 
     console.log(event.name + ' ' + event.id);
 let eventId = event.id;
     const li = document.createElement("li");
     li.innerHTML = `
 <h2>${event.name}</h2>
-<p> ${event.location}</p>
-<p>${event.date} </p>
-<p>${event.description}</p>
+<p> <b>Location: </b> ${event.location}</p>
+<p><b>Date: </b>${event.date} </p>
+<p><b>Description: </b>${event.description}</p>
 <button onclick = "deleteMe(${eventId})">Delete Event </button>
 `;
-//li.append(button);
-//button.addEventListener("click", deleteMe);
+
     return li;
   });
 
   eventList.replaceChildren(...eventsCards);
 }
 
-//Add Events
+//Add Events [THE POST IS BEING HANDLED HERE]
 async function addEvent(event) {
   event.preventDefault();
 
@@ -83,7 +80,7 @@ async function addEvent(event) {
   }
 }
 
-//Delete Events
+//Delete Events [THE DELETE IS BEING HANDLED HERE]
 async function deleteMe(eventId){
   let deleteURL = API_URL + '/' + eventId;
   console.log(deleteURL);

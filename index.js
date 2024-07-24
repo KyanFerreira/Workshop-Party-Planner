@@ -12,8 +12,6 @@ addEventForm.addEventListener("submit", addEvent);
 
 async function render() {
   await getEvents();
-  console.log(state.events);
-  console.log(API_URL);
   renderEvents();
 }
 
@@ -37,15 +35,21 @@ function renderEvents() {
   }
 
   const eventsCards = state.events.map((event) => {
-    console.log(event.date);
+    //const button = document.createElement("button");
+    //button.innerText = "Delete Me"
+    //button.id = event.id;
+    console.log(event.name + ' ' + event.id);
+let eventId = event.id;
     const li = document.createElement("li");
     li.innerHTML = `
 <h2>${event.name}</h2>
 <p> ${event.location}</p>
 <p>${event.date} </p>
 <p>${event.description}</p>
-<button> Delete Event </button>
+<button onclick = "deleteMe(${eventId})">Delete Event </button>
 `;
+//li.append(button);
+//button.addEventListener("click", deleteMe);
     return li;
   });
 
@@ -61,19 +65,36 @@ async function addEvent(event) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        name: addEventForm.name.value,
-        location: addEventForm.location.value,
-        date: addEventForm.date.value,
-        description: addEventForm.description.value,
+    name: addEventForm.name.value,
+    description: addEventForm.description.value,
+    date: new Date(addEventForm.date.value),
+    location: addEventForm.location.value
+  
       }),
     });
 
-    if (!response.ok) {
-      throw new Error("Failed to create artist");
-    }
+     if (!response.ok) {
+      throw new Error(response);
+     }
 
     render();
   } catch (error) {
     console.error(error);
   }
+}
+
+//Delete Events
+async function deleteMe(eventId){
+  let deleteURL = API_URL + '/' + eventId;
+  console.log(deleteURL);
+  try {
+  await fetch(deleteURL, {
+    method: 'DELETE',
+  })
+  render();
+}catch (error) {
+  console.error(error);
+}
+  
+
 }
